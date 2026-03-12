@@ -1,3 +1,5 @@
+import { ContactForm } from "@/components/landing-contact-form"
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-background flex flex-col items-center justify-center px-6">
@@ -9,13 +11,11 @@ export default function Home() {
         <div className="text-foreground text-lg leading-relaxed max-w-xl mx-auto">
           <p className="text-pretty">
             If you've found your way here, chances are you need help converting people into customers. To connect, just
-            send us a quick note at{" "}
-            <a href="mailto:info@conversionpartners.net" className="text-primary hover:underline">
-              info@conversionpartners.net
-            </a>
-            .
+            send us a quick note.
           </p>
         </div>
+
+        <ContactForm />
       </div>
     </main>
   )

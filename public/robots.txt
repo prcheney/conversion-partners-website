@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /internal-7x9k2m4p
+
+Sitemap: https://yourdomain.com/sitemap.xml
