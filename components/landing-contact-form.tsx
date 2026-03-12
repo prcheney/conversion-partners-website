@@ -28,38 +28,42 @@ export function ContactForm() {
 
   if (isSubmitted) {
     return (
-      <div className="max-w-md mx-auto text-center py-8">
+      <div className="max-w-md mx-auto text-center py-12">
         <p className="text-foreground text-lg">Thanks for reaching out. We'll be in touch soon.</p>
       </div>
     )
   }
 
   return (
-    <form action={handleSubmit} className="max-w-md mx-auto space-y-4 text-left">
-      <div className="grid grid-cols-2 gap-4">
+    <form action={handleSubmit} className="max-w-md mx-auto space-y-5 text-left pt-4">
+      <div className="space-y-5">
         <Input
           name="name"
           placeholder="Name"
           required
-          className="bg-background"
+          className="h-12 px-4 bg-background border-muted-foreground/20 focus:border-foreground transition-colors"
         />
         <Input
           name="email"
           type="email"
           placeholder="Email"
           required
-          className="bg-background"
+          className="h-12 px-4 bg-background border-muted-foreground/20 focus:border-foreground transition-colors"
+        />
+        <Textarea
+          name="message"
+          placeholder="How can we help?"
+          required
+          rows={5}
+          className="px-4 py-3 bg-background border-muted-foreground/20 focus:border-foreground transition-colors resize-none"
         />
       </div>
-      <Textarea
-        name="message"
-        placeholder="How can we help?"
-        required
-        rows={4}
-        className="bg-background resize-none"
-      />
       {error && <p className="text-destructive text-sm">{error}</p>}
-      <Button type="submit" className="w-full" disabled={isSubmitting}>
+      <Button 
+        type="submit" 
+        className="w-full h-12 bg-black text-white hover:bg-black/90 font-medium" 
+        disabled={isSubmitting}
+      >
         {isSubmitting ? "Sending..." : "Send Message"}
       </Button>
     </form>
