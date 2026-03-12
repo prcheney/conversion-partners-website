@@ -37,6 +37,7 @@ export function ContactFormModal({ trigger, title = "Let's Connect" }: ContactFo
           name: `${formData.firstName} ${formData.lastName}`.trim(),
           email: formData.email,
           phone: formData.phone || null,
+          message: formData.challenges || null,
           source: "conversionpartners.net",
           account_slug: "conversion-partners",
         }),
