@@ -23,7 +23,7 @@
   --destructive-foreground: #ffffff;
   --border: #e5e7eb;
   --input: #ffffff;
-  --ring: #1e7b85;
+  --ring: #111111;
   --chart-1: #1e7b85;
   --chart-2: #2d9cdb;
   --chart-3: #6b7280;
@@ -59,7 +59,7 @@
   --destructive-foreground: #ffffff;
   --border: #2a2a2a;
   --input: #2a2a2a;
-  --ring: #1e7b85;
+  --ring: #ffffff;
   --chart-1: #1e7b85;
   --chart-2: #2d9cdb;
   --chart-3: #9ca3af;
