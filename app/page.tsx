@@ -14,10 +14,18 @@ export default function Home() {
 
         <p className="text-foreground text-lg leading-relaxed text-center text-pretty">
           If you've found your way here, chances are you need help converting people into customers.
-          To connect, just send us a quick note.
+          To connect, just send us a quick note or give us a call.
         </p>
 
-        <ContactForm />
+        <div className="flex flex-col items-center gap-4">
+          <ContactForm />
+          <a 
+            href="tel:+19046437642" 
+            className="text-muted-foreground hover:text-foreground transition-colors text-sm"
+          >
+            (904) 643-7642
+          </a>
+        </div>
       </div>
     </main>
   )

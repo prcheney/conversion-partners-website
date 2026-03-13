@@ -53,7 +53,7 @@ export function ContactForm() {
       <DialogTrigger asChild>
         <Button
           size="lg"
-          className="h-12 px-8 bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
+          className="h-12 px-8 bg-foreground text-background hover:bg-foreground/90 font-medium"
         >
           Get in Touch
         </Button>
@@ -129,7 +129,7 @@ export function ContactForm() {
             {error && <p className="text-destructive text-sm">{error}</p>}
             <Button
               type="submit"
-              className="w-full h-11 bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
+              className="w-full h-11 bg-foreground text-background hover:bg-foreground/90 font-medium"
               disabled={isSubmitting}
             >
               {isSubmitting ? "Sending..." : "Send Message"}
