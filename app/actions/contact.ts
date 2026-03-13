@@ -5,6 +5,7 @@ export async function sendContactEmail(formData: FormData) {
   const email = formData.get("email") as string
   const phone = formData.get("phone") as string | null
   const message = formData.get("message") as string | null
+  const smsConsent = formData.get("sms_consent") === "true"
 
   if (!name || !email) {
     return { success: false, error: "Name and email are required." }
@@ -19,6 +20,7 @@ export async function sendContactEmail(formData: FormData) {
         email,
         phone: phone || null,
         message: message || null,
+        sms_consent: smsConsent,
         source: "conversionpartners.net",
         account_slug: "conversion-partners",
       }),
