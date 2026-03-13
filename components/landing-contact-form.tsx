@@ -75,6 +75,10 @@ export function ContactForm() {
           at any time. See our{" "}
           <a href="/privacy" className="underline hover:text-foreground transition-colors">
             Privacy Policy
+          </a>{" "}
+          and{" "}
+          <a href="/terms" className="underline hover:text-foreground transition-colors">
+            Terms and Conditions
           </a>
           .
         </p>
