@@ -24,5 +24,10 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-next-env.d.tssupabase/.temp
+next-env.d.ts
+
+# supabase cli scratch
+supabase/.temp
+
+# playwright mcp output
 .playwright-mcp

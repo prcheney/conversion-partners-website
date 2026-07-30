@@ -189,28 +189,78 @@ const workdir = await mkdtemp(path.join(tmpdir(), "onboarding-export-"))
 const htmlPath = path.join(workdir, "export.html")
 await writeFile(htmlPath, `<html><body>${parts.join("\n")}</body></html>`, "utf8")
 
-const title = `${questionnaire.config.clientName} — Onboarding Responses (${today})`
+const { folderId, docName } = questionnaire.config.export
+
+// Every Drive call needs these: the client folders live in a shared drive, and
+// without them the API behaves as if the files don't exist.
+const SHARED_DRIVE = { supportsAllDrives: true, includeItemsFromAllDrives: true }
+
+const gws = async (args, cwd) => {
+  const { stdout } = await run("gws", args, { cwd })
+  return JSON.parse(stdout)
+}
+
+async function findExistingDoc() {
+  const query = `'${folderId}' in parents and name = '${docName.replace(/'/g, "\\'")}' and trashed = false`
+  const result = await gws([
+    "drive",
+    "files",
+    "list",
+    "--params",
+    JSON.stringify({ q: query, fields: "files(id,name)", pageSize: 1, ...SHARED_DRIVE }),
+  ])
+  return result.files?.[0]?.id ?? null
+}
 
 try {
-  const { stdout } = await run(
-    "gws",
-    [
-      "drive",
-      "files",
-      "create",
-      "--json",
-      JSON.stringify({ name: title, mimeType: "application/vnd.google-apps.document" }),
-      "--upload",
-      "export.html",
-      "--upload-content-type",
-      "text/html",
-    ],
-    { cwd: workdir },
-  )
-  const id = JSON.parse(stdout).id
-  console.log(`  Google Doc: https://docs.google.com/document/d/${id}/edit\n`)
+  const existing = await findExistingDoc()
+
+  // Rewrite the same Doc when it's already there. One stable URL beats a folder
+  // full of dated copies, and anyone who bookmarked it keeps seeing current data.
+  const id = existing
+    ? (
+        await gws(
+          [
+            "drive",
+            "files",
+            "update",
+            "--params",
+            JSON.stringify({ fileId: existing, ...SHARED_DRIVE }),
+            "--upload",
+            "export.html",
+            "--upload-content-type",
+            "text/html",
+          ],
+          workdir,
+        )
+      ).id
+    : (
+        await gws(
+          [
+            "drive",
+            "files",
+            "create",
+            "--params",
+            JSON.stringify(SHARED_DRIVE),
+            "--json",
+            JSON.stringify({
+              name: docName,
+              parents: [folderId],
+              mimeType: "application/vnd.google-apps.document",
+            }),
+            "--upload",
+            "export.html",
+            "--upload-content-type",
+            "text/html",
+          ],
+          workdir,
+        )
+      ).id
+
+  console.log(`  ${existing ? "Updated" : "Created"} "${docName}"`)
+  console.log(`  https://docs.google.com/document/d/${id}/edit\n`)
 } catch (err) {
-  console.error("  Could not create the Google Doc:", err.stderr || err.message)
+  console.error("  Could not write the Google Doc:", err.stderr || err.message)
   console.error(`  The HTML is at ${htmlPath} if you want to upload it by hand.\n`)
   process.exitCode = 1
 } finally {

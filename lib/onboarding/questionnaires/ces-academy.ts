@@ -23,6 +23,11 @@ export const CES_ACADEMY: Questionnaire = {
       "You can close this and come back anytime. Your progress saves as you go.",
     ],
   },
+  export: {
+    // Clients shared drive → CES, alongside "Onboarding Questionnaire - CES".
+    folderId: "1LPd5rGuQ4yCH2s5Iq32zbHyzsnCiZqm3",
+    docName: "Onboarding Responses - CES",
+  },
 }
 
 export const CES_ACADEMY_SECTIONS: Section[] = [

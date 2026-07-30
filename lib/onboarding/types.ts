@@ -38,6 +38,13 @@ export interface Questionnaire {
     heading: string
     body: string[]
   }
+  /** Where scripts/export-onboarding.mjs writes the responses Doc. */
+  export: {
+    /** Drive folder id — put it next to the client's other files, not in My Drive. */
+    folderId: string
+    /** Reused every run, so the Doc keeps one stable URL instead of piling up copies. */
+    docName: string
+  }
 }
 
 /** A question paired with the section it belongs to and its overall position. */
