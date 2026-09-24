@@ -209,3 +209,48 @@ export function notifyRecipients(): string[] {
     .map((s) => s.trim())
     .filter(Boolean)
 }
+
+/**
+ * A contact-form submission from the public site. Unlike everything above, this
+ * send IS the record: nothing stores the enquiry anywhere else, so the caller is
+ * expected to surface a failure to the visitor rather than swallow it.
+ */
+export function sendContactNotice(input: {
+  to: string[]
+  name: string
+  email: string
+  phone: string | null
+  message: string | null
+  smsConsent: boolean
+}): Promise<boolean> {
+  // A typo'd address would bounce the whole send and lose the lead, so it only
+  // becomes the reply-to if it is plausibly an address at all.
+  const replyable = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(input.email)
+  return send({
+    to: input.to,
+    subject: `New website lead: ${input.name}`,
+    replyTo: replyable ? input.email : undefined,
+    html: shell(`
+      <p><strong>${esc(input.name)}</strong> filled out the contact form on
+         conversionpartners.net.</p>
+      <ul style="line-height:1.9">
+        <li>Email: ${esc(input.email)}</li>
+        <li>Phone: ${input.phone ? esc(input.phone) : "not given"}</li>
+        <li>SMS consent: ${input.smsConsent ? "yes" : "no"}</li>
+      </ul>
+      ${
+        input.message
+          ? `<div style="margin:20px 0;padding:14px 18px;border:1px solid #e5e7eb;border-radius:8px">
+               ${escMultiline(input.message)}
+             </div>`
+          : `<p style="color:#6b7280">They didn't leave a message.</p>`
+      }
+      ${
+        replyable
+          ? `<p style="font-size:14px;color:#6b7280">Reply to this email to reach them directly.</p>`
+          : `<p style="font-size:14px;color:#b45309">Their email address looks malformed, so replying
+               to this will not reach them. Try the phone number.</p>`
+      }
+    `),
+  })
+}
